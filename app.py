@@ -13,7 +13,7 @@ app.secret_key = 'secret_key_123'# agar session bisa dienkripsi
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = ''
-app.config['MYSQL_DB'] = 'db_berita_masapps'
+app.config['MYSQL_DB'] = 'manajemen_berita_kampus'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 mysql = MySQL(app)
@@ -179,7 +179,7 @@ def delete_kategori(id):
         flash("Kategori berhasil dihapus!", "warning")
     except Exception as e:
         # Menangani Error 1451 (Cannot delete or update a parent row: a foreign key constraint fails)
-        flash(f"Gagal menghapus! Kategori ini masih memiliki berita terkait. (Error: {e})", "danger")
+        flash("Gagal menghapus! Kategori ini masih digunakan oleh data lain (misal: Berita).", "danger")
     return redirect(url_for('kelola_kategori'))
 
 # --- CRUD HASHTAG ---
@@ -201,6 +201,19 @@ def add_hashtag():
     mysql.connection.commit()
     cur.close()
     flash("Hashtag berhasil ditambah!", "success")
+    return redirect(url_for('kelola_hashtag'))
+
+@app.route('/delete-hashtag/<int:id>')
+@login_required
+def delete_hashtag(id):
+    try:
+        cur = mysql.connection.cursor()
+        cur.execute("DELETE FROM hashtag WHERE id = %s", [id])
+        mysql.connection.commit()
+        cur.close()
+        flash("Hashtag berhasil dihapus!", "warning")
+    except Exception as e:
+        flash("Gagal menghapus! Hashtag ini masih digunakan oleh berita terkait.", "danger")
     return redirect(url_for('kelola_hashtag'))
 
 # --- PERBARUI ADD DATA BERITA ---
@@ -319,11 +332,14 @@ def edit_data(id):
 @app.route('/delete-data/<int:id>', methods=['GET'])
 @login_required
 def delete_data(id):
-    cur = mysql.connection.cursor()
-    cur.execute("DELETE FROM berita WHERE id = %s", [id])
-    mysql.connection.commit()
-    cur.close()
-    flash("Data berita telah dihapus!", "warning")
+    try:
+        cur = mysql.connection.cursor()
+        cur.execute("DELETE FROM berita WHERE id = %s", [id])
+        mysql.connection.commit()
+        cur.close()
+        flash("Data berita telah dihapus!", "warning")
+    except Exception as e:
+        flash("Gagal menghapus! Berita ini mungkin masih memiliki komentar atau data terkait lainnya.", "danger")
     return redirect(url_for('dashboard'))
 
 @app.route('/berita/<int:id>')
@@ -413,11 +429,14 @@ def kelola_komentar():
 @app.route('/delete-komentar/<int:id>', methods=['GET'])
 @login_required
 def delete_komentar(id):
-    cur = mysql.connection.cursor()
-    cur.execute("DELETE FROM komentar WHERE id = %s", [id])
-    mysql.connection.commit()
-    cur.close()
-    flash("Komentar telah dihapus!", "warning")
+    try:
+        cur = mysql.connection.cursor()
+        cur.execute("DELETE FROM komentar WHERE id = %s", [id])
+        mysql.connection.commit()
+        cur.close()
+        flash("Komentar telah dihapus!", "warning")
+    except Exception as e:
+        flash("Gagal menghapus komentar! Terjadi kesalahan pada database.", "danger")
     return redirect(url_for('kelola_komentar'))
 
 # --- CRUD VIDEO YOUTUBE ---
@@ -449,11 +468,14 @@ def add_video():
 @app.route('/delete-video/<int:id>')
 @login_required
 def delete_video(id):
-    cur = mysql.connection.cursor()
-    cur.execute("DELETE FROM videos WHERE id = %s", [id])
-    mysql.connection.commit()
-    cur.close()
-    flash("Video berhasil dihapus!", "warning")
+    try:
+        cur = mysql.connection.cursor()
+        cur.execute("DELETE FROM videos WHERE id = %s", [id])
+        mysql.connection.commit()
+        cur.close()
+        flash("Video berhasil dihapus!", "warning")
+    except Exception as e:
+        flash("Gagal menghapus video! Terjadi kesalahan pada database.", "danger")
     return redirect(url_for('kelola_video'))
 
 @app.route('/profil')
@@ -534,11 +556,14 @@ def delete_user(id):
         flash("Anda tidak bisa menghapus akun Anda sendiri!", "danger")
         return redirect(url_for('kelola_user'))
 
-    cur = mysql.connection.cursor()
-    cur.execute("DELETE FROM users WHERE id = %s", [id])
-    mysql.connection.commit()
-    cur.close()
-    flash("User telah dihapus!", "warning")
+    try:
+        cur = mysql.connection.cursor()
+        cur.execute("DELETE FROM users WHERE id = %s", [id])
+        mysql.connection.commit()
+        cur.close()
+        flash("User telah dihapus!", "warning")
+    except Exception as e:
+        flash("Gagal menghapus user! User ini mungkin memiliki data terkait di sistem.", "danger")
     return redirect(url_for('kelola_user'))
 
 @app.route('/video-gallery')

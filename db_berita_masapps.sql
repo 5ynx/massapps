@@ -280,20 +280,20 @@ ALTER TABLE `videos`
 -- Ketidakleluasaan untuk tabel `berita`
 --
 ALTER TABLE `berita`
-  ADD CONSTRAINT `fk_berita_kategori` FOREIGN KEY (`id_kategori`) REFERENCES `kategori` (`id`) ON DELETE SET NULL;
+  ADD CONSTRAINT `fk_berita_kategori` FOREIGN KEY (`id_kategori`) REFERENCES `kategori` (`id`) ON DELETE RESTRICT;
 
 --
 -- Ketidakleluasaan untuk tabel `berita_hashtag`
 --
 ALTER TABLE `berita_hashtag`
-  ADD CONSTRAINT `berita_hashtag_ibfk_1` FOREIGN KEY (`berita_id`) REFERENCES `berita` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `berita_hashtag_ibfk_2` FOREIGN KEY (`hashtag_id`) REFERENCES `hashtag` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `berita_hashtag_ibfk_1` FOREIGN KEY (`berita_id`) REFERENCES `berita` (`id`) ON DELETE RESTRICT,
+  ADD CONSTRAINT `berita_hashtag_ibfk_2` FOREIGN KEY (`hashtag_id`) REFERENCES `hashtag` (`id`) ON DELETE RESTRICT;
 
 --
 -- Ketidakleluasaan untuk tabel `komentar`
 --
 ALTER TABLE `komentar`
-  ADD CONSTRAINT `fk_berita_komentar` FOREIGN KEY (`berita_id`) REFERENCES `berita` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `fk_berita_komentar` FOREIGN KEY (`berita_id`) REFERENCES `berita` (`id`) ON DELETE RESTRICT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

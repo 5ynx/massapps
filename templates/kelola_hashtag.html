@@ -42,7 +42,9 @@
                                 <td>{{ h.id }}</td>
                                 <td><code class="fw-bold text-primary">{{ h.nama_hashtag }}</code></td>
                                 <td class="text-center">
-                                    <button class="btn btn-light btn-sm text-danger border"><i class="fas fa-trash"></i></button>
+                                    <a href="{{ url_for('delete_hashtag', id=h.id) }}" class="btn btn-light btn-sm text-danger border" onclick="return confirm('Hapus hashtag ini?')">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
                                 </td>
                             </tr>
                             {% else %}
