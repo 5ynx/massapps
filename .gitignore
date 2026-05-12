@@ -1,0 +1,34 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.env/
+.venv/
+
+# Flask
+instance/
+*.sqlite3
+*.db
+
+# IDE / Editor
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+tempCodeRunnerFile.py
+
+# Test cache
+.pytest_cache/
+
+# Uploaded user files (optional)
+static/uploads/
+
+# Logs
+*.log
